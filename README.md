@@ -8,3 +8,8 @@ To compile you will need the FreeBasic Compiler (fbc) for Linux. Alternatively y
 To compile after installing fbc, specify this way:
 
 fbc -lang qb benford.bas
+
+
+Details on our use of an earlier (DOS) incarnation of this program at <a href="benfordbench.org">benfordbench.org</a>
+
+Program has been redeveloped for Linux and currently I am using it to assess cancer identification in human DNA of SRR1294492.
