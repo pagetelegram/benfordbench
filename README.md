@@ -9,7 +9,7 @@ To compile after installing fbc, specify this way:
 
 fbc -lang qb benford.bas
 
-Details on our use of an earlier (DOS+OS/2) incarnation of this program at <a href="benfordbench.org">benfordbench.org</a>
+Details on our use of an earlier (DOS+OS/2) incarnation of this program at <a href="https://benfordbench.org">benfordbench.org</a>
 
 Program has been redeveloped for console based Linux (QB64 compiling requires Xwindow environment and resulting compiled programs are much larger in comparison to compiling with fbc.)
 
