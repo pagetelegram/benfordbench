@@ -217,8 +217,8 @@ loop until (eof(1))
 close #1
 print "Generating the ASCII Chart..."   'create the charts
 filenam$=load1$+"_"+a12$+"-"+prog$+"_.log"
-open filenam$ for input as #12
-shell "rm chart_"+filenam$
+open filenam$ for input as #1
+shell "rm chart_"+filenam$+".txt"
 ccc=0
 do
 
