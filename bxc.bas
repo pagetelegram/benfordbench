@@ -19,6 +19,15 @@
     'This program uses OS specific operations and will only work in
     'Unix/Linux. There are no plans to make this available for DOS/Windows
     'however may work and compile with GNU DOS command line tools in OS/2.
+    '
+    'The Benford Bench Project as of this writing consist of the following
+    'volunteers:
+    '
+    'Jason Page
+    'Morris Chukhman
+    'Padraig O'Hara
+    'Kevin Perez
+    'Michael Fiedler
 
 dim n(255)															' Set array to handle data lines up to 255 chars
 express$=command$(-1)
