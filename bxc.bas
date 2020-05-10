@@ -70,14 +70,14 @@ if tat<>4 then
 print "Total flags=";tat
 print "Arguments ";tif$;",";tid$;",";til$;",";tic$
 print "Press any key to continue to prompts, or use -h as a flag in command for command line help."
-sleep 10
+sleep 4
 goto 1:
 else
 ' -f = load1$, -d = a12$ [all or 1], -l = prog$, -c = col$
 load1$=ltrim$(rtrim$(tif$)):a12$=ltrim$(rtrim$(tid$)):prog$=ltrim$(rtrim$(til$)): col$=ltrim$(rtrim$(tic$))
 print load1$, a12$,prog$,col$
 print "Press any key to continue"
-sleep 10
+sleep 4
 goto 2:
 end if
 
@@ -87,11 +87,21 @@ input "Load>",load1$												' Ask for data file for analysis
 input "[A]ll Digits [1]st Digit?>",a12$     						' Ask whether to count all digits or first
 input "Capture Average Every (default: 10000) Points?>",prog$ 		' Specify count / data plot segments
 input "Which Column Number (0=default: single column data only)",col$
-if col$="" then col$="0"
+
 if len(prog$)=0 then prog$="10000"									' If no input specified then default vale = 10000
  shell "echo > "+load1$+"_"+a12$+"-"+prog$+"-.log"					' Empty data log file of values
  shell "echo > "+load1$+"_"+a12$+"-"+prog$+"_.log"  				' Empty data log file of percentages
 2:
+if val(col$)<>0 and val(col$)<>1 then 
+ shell "cut -f"+ltrim$(rtrim$((col$)))+" -d',' "+load1$+" > "+"c"+col$+"_"+load1$
+ print "Command Using:"+" cut -f"+ltrim$(rtrim$((col$)))+" -d',' "+load1$+" > "+"c"+col$+"_"+load1$
+ 'sleep
+ loaf$="c"+col$+"_"+load1$
+ load1$=loaf$ 
+ print "File Using:";load1$
+ 'sleep
+end if
+
 c=0:c1=0:c2=0:c3=0:c4=0:c5=0:c6=0:c7=0:c8=0:c9=0					' Reset counters on start
 'locate 1,1 :
 print
@@ -104,10 +114,13 @@ color 12,14
 print "    Time,  1,  2,  3,  4,  5, 6, 7, 8, 9"
 color 7,0
 'view print 6 to 24													' Set preview window for results
+'color 15,11
+'print load1$
+color 7,0
 open load1$ for input as #1											' Load data file for analysis
 do
  if not eof(1) then input #1,toot$ 									' Load value from data file
-if val(col$)=0  then ot$=toot$
+ot$=toot$
 if c >= val(prog$) then												' If segment within range then do the analysis
  c$=str$(c)    : c6$=str$(c6)										' Perform value format to strings
  c1$=str$(c1)  : c7$=str$(c7)
@@ -137,7 +150,7 @@ if c >= val(prog$) then												' If segment within range then do the analysi
   c=0:c1=0:c2=0:c3=0:c4=0:c5=0:c6=0:c7=0:c8=0:c9=0  				' Reset counters
 'sleep 1
 end if
-if ucase$(a12$)="A" then position=len(ot$) 							' Count all digits
+if left$((ucase$(a12$)),1)="A" then position=len(ot$) 							' Count all digits
 if ucase$(a12$)="1" then position=1 								' Count only first digit
 for i=1 to position  												' count to position
   n(i)=val(mid$(ot$,i,1))
