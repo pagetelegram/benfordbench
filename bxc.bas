@@ -1,3 +1,25 @@
+    'This file is part of bxc/benford.
+
+    'bxc/benford aka Benford Bench is free software: you can redistribute
+    'it and/or modify it under the terms of the GNU General Public License
+    'as published by the Free Software Foundation, either version 3 of the
+    'License, or (at your option) any later version.
+
+    'bxc/benford is distributed in the hope that it will be useful,
+    'but WITHOUT ANY WARRANTY; without even the implied warranty of
+    'MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    'GNU General Public License for more details.
+
+    'You should have received a copy of the GNU General Public License
+    'along with bxc/benford.  If not, see <https://www.gnu.org/licenses/>.
+    
+    'bxc/benford is written by Jason S. Page as part of the Benford Bench
+    'project, benfordbench.org in operation since 2016.
+    
+    'This program uses OS specific operations and will only work in
+    'Unix/Linux. There are no plans to make this available for DOS/Windows
+    'however may work and compile with GNU DOS command line tools in OS/2.
+
 dim n(255)															' Set array to handle data lines up to 255 chars
 express$=command$(-1)
 ' -f = load1$, -d = a12$ [all or 1], -l = prog$, -c = column$
