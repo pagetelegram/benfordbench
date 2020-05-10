@@ -66,19 +66,36 @@ end select
 dc=dc+1
 
 loop until dc=len(express$)
-if tat<>4 then
-print "Total flags=";tat
-print "Arguments ";tif$;",";tid$;",";til$;",";tic$
-print "Press any key to continue to prompts, or use -h as a flag in command for command line help."
-sleep 4
-goto 1:
-else
-' -f = load1$, -d = a12$ [all or 1], -l = prog$, -c = col$
-load1$=ltrim$(rtrim$(tif$)):a12$=ltrim$(rtrim$(tid$)):prog$=ltrim$(rtrim$(til$)): col$=ltrim$(rtrim$(tic$))
-print load1$, a12$,prog$,col$
-print "Press any key to continue"
-sleep 4
-goto 2:
+
+if tat<>4 then                                  ' if not enough arguments
+ print "Total flags=";tat
+ print "Arguments ";tif$;",";tid$;",";til$;",";tic$
+ print "Press any key to continue to prompts, or use -h as a flag in command for command line help."
+ goto 1:
+end if
+
+'print "htt or ftp?";left$(tif$,3):sleep
+
+if left$(tif$,3)="ftp" or left$(tif$,3)="htt" then ' check for web link; if true then download the data file
+ shell "wget "+tif$ 				   'get data file
+'shell "find . -type f -exec stat -c '%Y %n' {} \; | sort -nr | awk 'NR==1,NR==1 {print $2}' > file.nam"
+'shell "awk 'END{ var=FILENAME; split (var,a,/\//); print a[5]}' "+ tif$ + " > file.nam"
+shell "ls -w1 -t > file.nam" 			' get the latest downloaded file to read from the file list newest first
+ open "file.nam" for input as #11
+  if not (eof(11)) then input #11,filenam$
+  if not (eof(11)) then input #11,filenam$
+  print "Downloaded file>";filenam$ 
+ close #11
+  tif$=filenam$
+  print tif$
+  sleep 3
+  
+  ' -f = load1$, -d = a12$ [all or 1], -l = prog$, -c = col$
+  load1$=ltrim$(rtrim$(tif$)):a12$=ltrim$(rtrim$(tid$)):prog$=ltrim$(rtrim$(til$)): col$=ltrim$(rtrim$(tic$))
+  print load1$, a12$,prog$,col$
+  print "Press any key to continue"
+  sleep 4
+goto 2: 'skip interactive inputs
 end if
 
 1:
