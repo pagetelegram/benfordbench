@@ -16,3 +16,6 @@ Program has been redeveloped for console based Linux (QB64 compiling requires Xw
 Next version (1.0a) will include charting in ASCII for the error report files.
 
 <i>!# Help needed to create subroutines. I intended to do this from the get-go (the thought crossed my mind) and my lack of working memory was interfering with using what mental resources I had to keep on track. This resulted in no sub routines and very little commenting.</i>
+
+NEW: bxc.bas // offers command line automation with flag support:
+bxc -f [data file] -d [all] or [1] -l [length of sample pools (ie 10000)] -c [column number] - {terminal}
