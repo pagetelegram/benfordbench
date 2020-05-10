@@ -74,7 +74,7 @@ if tat<>4 then                                  ' if not enough arguments
  goto 1:
 end if
 
-'print "htt or ftp?";left$(tif$,3):sleep
+'print "htt or ftp?";left$(tif$,3):
 
 if left$(tif$,3)="ftp" or left$(tif$,3)="htt" then ' check for web link; if true then download the data file
  shell "wget -N "+tif$ 				   'get data file
@@ -88,13 +88,13 @@ shell "ls -w1 -t > file.nam" 			' get the latest downloaded file to read from th
  close #11
   tif$=filenam$
   print tif$
-  sleep 3
+  ' 3
   
   ' -f = load1$, -d = a12$ [all or 1], -l = prog$, -c = col$
   load1$=ltrim$(rtrim$(tif$)):a12$=ltrim$(rtrim$(tid$)):prog$=ltrim$(rtrim$(til$)): col$=ltrim$(rtrim$(tic$))
   print load1$, a12$,prog$,col$
   print "Press any key to continue"
-  sleep 4
+   '4
 goto 2: 'skip interactive inputs
 end if
 
@@ -112,11 +112,11 @@ if len(prog$)=0 then prog$="10000"									' If no input specified then default 
 if val(col$)<>0 and val(col$)<>1 then 
  shell "cut -f"+ltrim$(rtrim$((col$)))+" -d',' "+load1$+" > "+"c"+col$+"_"+load1$
  print "Command Using:"+" cut -f"+ltrim$(rtrim$((col$)))+" -d',' "+load1$+" > "+"c"+col$+"_"+load1$
- 'sleep
+ '
  loaf$="c"+col$+"_"+load1$
  load1$=loaf$ 
  print "File Using:";load1$
- 'sleep
+ '
 end if
 
 c=0:c1=0:c2=0:c3=0:c4=0:c5=0:c6=0:c7=0:c8=0:c9=0					' Reset counters on start
@@ -165,7 +165,7 @@ if c >= val(prog$) then												' If segment within range then do the analysi
   shell "echo "+cc1$+" >> "+load1$+"_"+a12$+"-"+prog$+"-.log"					  ' Store values
   shell "echo "+cc2$+" >> "+load1$+"_"+a12$+"-"+prog$+"_.log"					  ' Store percentages
   c=0:c1=0:c2=0:c3=0:c4=0:c5=0:c6=0:c7=0:c8=0:c9=0  				' Reset counters
-'sleep 1
+' 1
 end if
 if left$((ucase$(a12$)),1)="A" then position=len(ot$) 							' Count all digits
 if ucase$(a12$)="1" then position=1 								' Count only first digit
@@ -211,7 +211,69 @@ end select
     'locate 6+(n(i)),1
     'print xss$+eas$ 
  next i 
-'sleep 1
+' 1
  eas$="":xss$=""
 loop until (eof(1))
 close #1
+print "Generating the ASCII Chart..."   'create the charts
+filenam$=load1$+"_"+a12$+"-"+prog$+"_.log"
+open filenam$ for input as #12
+shell "rm chart_"+filenam$
+ccc=0
+do
+
+if not(eof(12)) then input #12, toss$, throw1$, throw2$, throw3$, throw4$, throw5$, throw6$, throw7$, throw8$, throw9$
+
+for i=1 to val(throw1$)
+as1$=as1$+"1"
+next i
+
+for i=1 to val(throw2$)
+as2$=as2$+"2"
+next i
+
+for i=1 to val(throw3$)
+as3$=as3$+"3"
+next i
+
+for i=1 to val(throw4$)
+as4$=as4$+"4"
+next i
+
+for i=1 to val(throw5$)
+as5$=as5$+"5"
+next i
+
+for i=1 to val(throw6$)
+as6$=as6$+"6"
+next i
+
+for i=1 to val(throw7$)
+as7$=as7$+"7"
+next i
+
+for i=1 to val(throw8$)
+as8$=as8$+"8"
+next i
+
+for i=1 to val(throw9$)
+as9$=as9$+"9"
+next i
+ccc=ccc+1
+fnam$="chart_"+filenam$
+
+shell "echo "+as1$+" >> "+ fnam$
+shell "echo "+as2$+" >> "+ fnam$
+shell "echo "+as3$+" >> "+ fnam$
+shell "echo "+as4$+" >> "+ fnam$
+shell "echo "+as5$+" >> "+ fnam$
+shell "echo "+as6$+" >> "+ fnam$
+shell "echo "+as7$+" >> "+ fnam$
+shell "echo "+as8$+" >> "+ fnam$
+shell "echo "+as9$+" >> "+ fnam$
+as1$="":as2$="":as3$="":as4$="":as5$="":as6$="":as7$="":as8$="":as9$=""
+shell "echo Chart #"+str$(ccc)+" >> "+fnam$
+loop until(eof(12))
+close #12
+shell "mv "+fnam$+" "+fnam$+".txt"
+system
