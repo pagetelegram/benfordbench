@@ -77,7 +77,7 @@ end if
 'print "htt or ftp?";left$(tif$,3):sleep
 
 if left$(tif$,3)="ftp" or left$(tif$,3)="htt" then ' check for web link; if true then download the data file
- shell "wget "+tif$ 				   'get data file
+ shell "wget -N "+tif$ 				   'get data file
 'shell "find . -type f -exec stat -c '%Y %n' {} \; | sort -nr | awk 'NR==1,NR==1 {print $2}' > file.nam"
 'shell "awk 'END{ var=FILENAME; split (var,a,/\//); print a[5]}' "+ tif$ + " > file.nam"
 shell "ls -w1 -t > file.nam" 			' get the latest downloaded file to read from the file list newest first
@@ -123,9 +123,9 @@ c=0:c1=0:c2=0:c3=0:c4=0:c5=0:c6=0:c7=0:c8=0:c9=0					' Reset counters on start
 'locate 1,1 :
 print
 'locate 2,1: 
-print "Benford X-C Forensics Digital Analysis Tool by Jason Page 5-9-2020"
+print "Benford X-C Forensics Digital Analysis Tool by Jason Page 5-10-2020"
 'locate 3,1: 
-print "------------------------------------------------------------------"
+print "-------------------------------------------------------------------"
 'locate 4,1: 
 color 12,14
 print "    Time,  1,  2,  3,  4,  5, 6, 7, 8, 9"
