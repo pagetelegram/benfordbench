@@ -108,7 +108,7 @@ if tat=4 then                                  ' if not enough arguments
 if col$="0" then col$="1" 
 
 if left$(tif$,3)="ftp" or left$(tif$,3)="htt" then ' check for web link; if true then download the data file
- shell "wget -N "+tif$ 				   'get data file
+ shell "wget -N -c "+tif$ 				   'get data file
 'shell "find . -type f -exec stat -c '%Y %n' {} \; | sort -nr | awk 'NR==1,NR==1 {print $2}' > file.nam"
 'shell "awk 'END{ var=FILENAME; split (var,a,/\//); print a[5]}' "+ tif$ + " > file.nam"
 shell "ls -w1 -t > file.nam" 			' get the latest downloaded file to read from the file list newest first
