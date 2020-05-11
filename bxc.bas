@@ -98,14 +98,14 @@ dc=dc+1
 
 loop until dc=len(express$)
 
-if tat<>4 then                                  ' if not enough arguments
+if tat=4 then                                  ' if not enough arguments
  print "Total flags=";tat
  print "Arguments ";tif$;",";tid$;",";til$;",";tic$
  print "Press any key to continue to prompts, or use -h as a flag in command for command line help."
- goto 1:
-end if
-
-'print "htt or ftp?";left$(tif$,3):
+ sleep 3
+  load1$=ltrim$(rtrim$(tif$)):a12$=ltrim$(rtrim$(tid$)):prog$=ltrim$(rtrim$(til$)): col$=ltrim$(rtrim$(tic$))
+  print load1$, a12$,prog$,col$
+if col$="0" then col$="1" 
 
 if left$(tif$,3)="ftp" or left$(tif$,3)="htt" then ' check for web link; if true then download the data file
  shell "wget -N "+tif$ 				   'get data file
@@ -124,32 +124,38 @@ shell "ls -w1 -t > file.nam" 			' get the latest downloaded file to read from th
   ' -f = load1$, -d = a12$ [all or 1], -l = prog$, -c = col$
   load1$=ltrim$(rtrim$(tif$)):a12$=ltrim$(rtrim$(tid$)):prog$=ltrim$(rtrim$(til$)): col$=ltrim$(rtrim$(tic$))
   print load1$, a12$,prog$,col$
-  print "Press any key to continue"
+  'print "Press any key to continue"
    '4
-goto 2: 'skip interactive inputs
 end if
 
+
+goto 2:
+ else
+ print "Total flags=";tat;". Must be a total of 4 to qualify headless operation."
+ goto 1:
+end if
 1:
 shell "ls *.dat"													' List all dat files
 input "Load>",load1$												' Ask for data file for analysis 
 input "[A]ll Digits [1]st Digit?>",a12$     						' Ask whether to count all digits or first
 input "Capture Average Every (default: 10000) Points?>",prog$ 		' Specify count / data plot segments
 input "Which Column Number (0=default: single column data only)",col$
-
+2:
 if len(prog$)=0 then prog$="10000"									' If no input specified then default vale = 10000
  shell "echo > "+load1$+"_"+a12$+"-"+prog$+"-.log"					' Empty data log file of values
  shell "echo > "+load1$+"_"+a12$+"-"+prog$+"_.log"  				' Empty data log file of percentages
-2:
+
 if val(col$)<>0 and val(col$)<>1 then 
  shell "cut -f"+ltrim$(rtrim$((col$)))+" -d',' "+load1$+" > "+"c"+col$+"_"+load1$
  print "Command Using:"+" cut -f"+ltrim$(rtrim$((col$)))+" -d',' "+load1$+" > "+"c"+col$+"_"+load1$
  '
- loaf$="c"+col$+"_"+load1$
- load1$=loaf$ 
- print "File Using:";load1$
  '
+ toad$="c"+col$+"_"+load1$
+ load1$=toad$
 end if
 
+'print "File Using:";load1$
+ 
 c=0:c1=0:c2=0:c3=0:c4=0:c5=0:c6=0:c7=0:c8=0:c9=0					' Reset counters on start
 'locate 1,1 :
 print
@@ -166,9 +172,15 @@ color 7,0
 'print load1$
 color 7,0
 open load1$ for input as #1											' Load data file for analysis
+tc=0
+if not (eof(1)) then input #1,line1$
 do
- if not eof(1) then input #1,toot$ 									' Load value from data file
-ot$=toot$
+ 												' record count to total record count
+ if not eof(1) then
+   input #1,ot$:
+   tc=tc+1 									' Load value from data file
+ end if
+ 
 if c >= val(prog$) then												' If segment within range then do the analysis
  c$=str$(c)    : c6$=str$(c6)										' Perform value format to strings
  c1$=str$(c1)  : c7$=str$(c7)
@@ -185,8 +197,8 @@ if c >= val(prog$) then												' If segment within range then do the analysi
  p9$=str$(int(((c9*100)/(c*100))*100))
  p4$=str$(int(((c4*100)/(c*100))*100))
  p5$=str$(int(((c5*100)/(c*100))*100))
- cc1$=ot$+","+c1$+","+c2$+","+c3$+","+c4$+","+c5$+","+c6$+","+c7$+","+c8$+","+c9$  ' Set values for storage
- cc2$=ot$+","+p1$+","+p2$+","+p3$+","+p4$+","+p5$+","+p6$+","+p7$+","+p8$+","+p9$  ' Set percentages for storage
+ cc1$=ot$+","+str$(tc)+","+c1$+","+c2$+","+c3$+","+c4$+","+c5$+","+c6$+","+c7$+","+c8$+","+c9$  ' Set values for storage
+ cc2$=ot$+","+str$(tc)+","+p1$+","+p2$+","+p3$+","+p4$+","+p5$+","+p6$+","+p7$+","+p8$+","+p9$  ' Set percentages for storage
  color 14,12
  'locate 4,1:
   print "#:";cc1$
@@ -231,29 +243,22 @@ for i=1 to position  												' count to position
    c=c+1
    c9=c9+1
 end select
- 'ends = (int((n(i)*100)/(c*100)))*33    						'Percent/Position of end of each line
-  'for p=1 to ends
-   'xss$=xss$+str$(n(i))
-'  next p
-  'locate (n(i))+6, ends
-   'for e=1 to 80-ends
-    ' eas$=eas$+" "
-   'next e
-    'locate 6+(n(i)),1
-    'print xss$+eas$ 
  next i 
 ' 1
  eas$="":xss$=""
 loop until (eof(1))
 close #1
 print "Generating the ASCII Chart..."   'create the charts
+print load1$,a12$,prog$
 filenam$=load1$+"_"+a12$+"-"+prog$+"_.log"
-open filenam$ for input as #1
+print filenam$
+open filenam$ for input as #12
+if not(eof(12)) then line input #12,empty$
 shell "rm chart_"+filenam$+".txt"
 ccc=0
 do
 
-if not(eof(12)) then input #12, toss$, throw1$, throw2$, throw3$, throw4$, throw5$, throw6$, throw7$, throw8$, throw9$
+if not(eof(12)) then input #12, toss$, recd$, throw1$, throw2$, throw3$, throw4$, throw5$, throw6$, throw7$, throw8$, throw9$
 
 for i=1 to val(throw1$)
 as1$=as1$+"1"
@@ -292,19 +297,23 @@ as9$=as9$+"9"
 next i
 ccc=ccc+1
 fnam$="chart_"+filenam$
-
-shell "echo "+as1$+" >> "+ fnam$
-shell "echo "+as2$+" >> "+ fnam$
-shell "echo "+as3$+" >> "+ fnam$
-shell "echo "+as4$+" >> "+ fnam$
-shell "echo "+as5$+" >> "+ fnam$
-shell "echo "+as6$+" >> "+ fnam$
-shell "echo "+as7$+" >> "+ fnam$
-shell "echo "+as8$+" >> "+ fnam$
-shell "echo "+as9$+" >> "+ fnam$
+shell "echo record number " + recd$ + " at value " + toss$ + " >> " + fnam$
+shell "echo "+as1$ + " " + " at "+throw1$+ "% >> " + fnam$
+shell "echo "+as2$ + " " + " at "+throw2$+ "% >> " + fnam$
+shell "echo "+as3$ + " " + " at "+throw3$+ "% >> " + fnam$
+shell "echo "+as4$ + " " + " at "+throw4$+ "% >> " + fnam$
+shell "echo "+as5$ + " " + " at "+throw5$+ "% >> " + fnam$
+shell "echo "+as6$ + " " + " at "+throw6$+ "% >> " + fnam$
+shell "echo "+as7$ + " " + " at "+throw7$+ "% >> " + fnam$
+shell "echo "+as8$ + " " + " at "+throw8$+ "% >> " + fnam$
+shell "echo "+as9$ + " " + " at "+throw9$+ "% >> " + fnam$
 as1$="":as2$="":as3$="":as4$="":as5$="":as6$="":as7$="":as8$="":as9$=""
-shell "echo Chart #"+str$(ccc)+" >> "+fnam$
+'shell "echo Chart #"+str$(ccc)+" >> "+fnam$
 loop until(eof(12))
 close #12
 shell "mv "+fnam$+" "+fnam$+".txt"
+print "head:"
+shell "head -n10 "+fnam$+".txt"
+print "tail:"
+shell "tail -n10 "+fnam$+".txt"
 system
