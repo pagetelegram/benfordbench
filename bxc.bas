@@ -114,7 +114,7 @@ if tat=4 then                                  							' if not enough arguments
  print "Total flags=";tat
  print "Arguments ";tif$;",";tid$;",";til$;",";tic$
  print "Press any key to continue to prompts, or use -h as a flag in command for command line help."
- sleep 3
+ 'sleep 3
  load1$=ltrim$(rtrim$(tif$)):a12$=ltrim$(rtrim$(tid$)):prog$=ltrim$(rtrim$(til$)): col$=ltrim$(rtrim$(tic$))
  print load1$, a12$,prog$,col$
 
